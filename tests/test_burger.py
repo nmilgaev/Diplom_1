@@ -46,12 +46,10 @@ class TestBurger:
             burger.add_ingredient(ingredient_mock)
         assert burger.get_price() == expected_price
 
-    def test_get_price_without_bun(self, burger, ingredient):
+    def test_get_receipt_with_bun(self, burger, bun, ingredient):
+        burger.set_buns(bun)
         burger.add_ingredient(ingredient)
-        with pytest.raises(AttributeError):
-            burger.get_price()
-
-    def test_get_receipt_without_bun(self, burger, ingredient):
-        burger.add_ingredient(ingredient)
-        with pytest.raises(AttributeError):
-            burger.get_receipt()
+        receipt = burger.get_receipt()
+        assert "Price: " in receipt
+        assert f'(==== {bun.get_name()} ====)' in receipt
+        assert f'(==== {bun.get_name()} ====)\n' in receipt
